@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAvitecTask", "TestAvitecTask.csproj", "{ED7FC286-F1B0-4EAE-9E1C-31969376ACAB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED7FC286-F1B0-4EAE-9E1C-31969376ACAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED7FC286-F1B0-4EAE-9E1C-31969376ACAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED7FC286-F1B0-4EAE-9E1C-31969376ACAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED7FC286-F1B0-4EAE-9E1C-31969376ACAB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9A966E8B-8DD1-4593-BBB5-39362FC0D5F6}
+	EndGlobalSection
+EndGlobal
