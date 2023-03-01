@@ -12,11 +12,14 @@ namespace TestAvitecTask.Services
     {
         public static void FinalActions(ApplicationParamsDto UtilityParams)
         {
-            ShowCopiedFiles(UtilityParams);
+            if (!UtilityParams.IsCopyingStopped)
+            {
+                ShowCopiedFiles(UtilityParams);
 
-            CalculateTotalSize(UtilityParams);
+                CalculateTotalSize(UtilityParams);
 
-            DeleteSourceFiles(UtilityParams);
+                DeleteSourceFiles(UtilityParams);
+            }
         }
 
         private static void ShowCopiedFiles(ApplicationParamsDto UtilityParams)

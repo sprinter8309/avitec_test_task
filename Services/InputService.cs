@@ -10,31 +10,29 @@ namespace TestAvitecTask.Services
 {
     internal class InputService
     {
-        public static void GetUtilityOptions(ApplicationParamsDto UtilityParams, string[] args)
+        public static void GetUtilityOptionsDirectInput(ApplicationParamsDto UtilityParams)
         {
-            if (Array.Exists(args, element => element=="--remove-after-copy")) {
+            Console.WriteLine("Введите количество потоков копирования:");
+            UtilityParams.CopyThreadsQuantity = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Требуется ли удалять файлы после копирования (yes/no, по-умолчанию no):");
+            string ResponseRemoveBuf = Console.ReadLine();
+            if (ResponseRemoveBuf.Trim().ToLower() == "yes") {
                 UtilityParams.IsDeleteSourceFiles = true;
             }
 
-            if (Array.Exists(args, element => element == "--show-copied-files")) {
+            Console.WriteLine("Требуется ли выводить список скопированных файлов (yes/no, по-умолчанию no):");
+            string ResponseShowBuf = Console.ReadLine();
+            if (ResponseShowBuf.Trim().ToLower() == "yes")
+            {
                 UtilityParams.IsShowCopiedFiles = true;
             }
 
-            if (Array.Exists(args, element => element == "--calculate-total-size")) {
+            Console.WriteLine("Требуется ли посчитать объем скопированных файлов (yes/no, по-умолчанию no):");
+            string ResponseCalculateBuf = Console.ReadLine();
+            if (ResponseCalculateBuf.Trim().ToLower() == "yes")
+            {
                 UtilityParams.IsTotalSizeMustBeCalculated = true;
-            }
-
-            Regex ThreadCountParam = new Regex(@"--threads-quantity=(\d+)");
-
-            foreach (var param in args) {
-                if (ThreadCountParam.IsMatch(param)) {
-
-                    MatchCollection Matches = ThreadCountParam.Matches(param);
-                    Group GrBuf = Matches[0].Groups[1];
-                    string StrBuf = GrBuf.Captures[0].ToString();
-
-                    UtilityParams.CopyThreadsQuantity = Convert.ToInt32(StrBuf);
-                }
             }
         }
 

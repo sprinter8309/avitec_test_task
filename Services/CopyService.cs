@@ -29,7 +29,7 @@ namespace TestAvitecTask.Services
                     }
                 }
 
-                if (CopyFileName.Length > 0)
+                if (CopyFileName.Length > 0 && !UtilityParams.IsCopyingStopped)
                 {
                     WatchObject.Start();
 
@@ -54,11 +54,13 @@ namespace TestAvitecTask.Services
             }            
         }
 
-        public static void ControlCopyProcess(List<Thread> CopyThreadsPool, ApplicationParamsDto UtilityParams)
+        public static void ControlCopyProcess(List<Thread> CopyThreadsPool, ApplicationParamsDto UtilityParams, Thread StopControlThread)
         {
             bool IsThreadsWorking = true;
 
             Console.WriteLine("Начало копирования");
+            Console.WriteLine();
+            Console.WriteLine("! Вы можете прервать выполнение копирования, нажав любую клавишу:");
 
             while (IsThreadsWorking)
             {
@@ -75,7 +77,24 @@ namespace TestAvitecTask.Services
                 }                
             }
 
-            Console.WriteLine("Копирование выполнено");
+            Console.WriteLine();
+
+            if (!UtilityParams.IsCopyingStopped) {
+                Console.WriteLine("Копирование завершено");
+                StopControlThread.Abort();
+            } else {
+                DeleteCopiedFilesAfterStopCommand(UtilityParams);
+                Console.WriteLine("Копирование было отменено, скопированные файлы удалены");
+            }
+        }
+
+        public static void WatchStopCopyProcess(object InputObject)
+        {
+            ConsoleKeyInfo CheckReadKey = Console.ReadKey(true);
+            Console.WriteLine("Отменяем копирование");
+            if (InputObject is ApplicationParamsDto UtilityParams) {
+                UtilityParams.IsCopyingStopped = true;
+            }   
         }
 
         public static void CopyFiles(ApplicationParamsDto UtilityParams)
@@ -90,13 +109,16 @@ namespace TestAvitecTask.Services
                 {
                     CopyThreadsPool.Add(new Thread(new ParameterizedThreadStart(CopyFileAction)));
                 }
-
+                
                 foreach (Thread ThElement in CopyThreadsPool)
                 {
                     ThElement.Start(UtilityParams);
                 }
 
-                ControlCopyProcess(CopyThreadsPool, UtilityParams);
+                Thread StopControlThread = new Thread(new ParameterizedThreadStart(WatchStopCopyProcess));
+                StopControlThread.Start(UtilityParams);
+
+                ControlCopyProcess(CopyThreadsPool, UtilityParams, StopControlThread);
             }
             else {
                 Console.WriteLine("Нет файлов подходящих для копирования");
@@ -123,6 +145,15 @@ namespace TestAvitecTask.Services
 
             UtilityParams.CopyFilesList = SourceFileNamesList.Except(TargetFileNamesList).ToList();
             UtilityParams.CopyFilesHeap = UtilityParams.CopyFilesList.ToList();
+        }
+
+        private static void DeleteCopiedFilesAfterStopCommand(ApplicationParamsDto UtilityParams)
+        {
+            foreach (string file in UtilityParams.CopyFilesList) {
+                if (File.Exists(Path.Combine(UtilityParams.TargetPath, file))) {
+                    File.Delete(Path.Combine(UtilityParams.TargetPath, file));
+                }
+            }
         }
     }
 }

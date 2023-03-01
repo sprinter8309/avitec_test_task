@@ -9,9 +9,9 @@ namespace TestAvitecTask
         {
             ApplicationParamsDto UtilityParams = new ApplicationParamsDto();
 
-            InputService.GetUtilityOptions(UtilityParams, args);
-
             InputService.GetUtilityParams(UtilityParams);
+
+            InputService.GetUtilityOptionsDirectInput(UtilityParams);
 
             CopyService.CopyFiles(UtilityParams);
 

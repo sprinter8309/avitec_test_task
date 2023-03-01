@@ -25,5 +25,7 @@ namespace TestAvitecTask.Data.Dto
         public List<string> CopyFilesList { get; set; } = null;
 
         public List<string> CopyFilesHeap { get; set; } = null;
+
+        public bool IsCopyingStopped { get; set; } = false;
     }
 }
